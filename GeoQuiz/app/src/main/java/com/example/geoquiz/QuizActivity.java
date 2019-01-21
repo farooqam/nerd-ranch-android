@@ -10,22 +10,21 @@ public class QuizActivity extends AppCompatActivity {
 
     private Button buttonTrue;
     private Button buttonFalse;
+    private Toaster toastService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_main);
 
+        toastService = new ToastService(QuizActivity.this);
+
         buttonTrue = findViewById(R.id.buttonTrue);
 
         buttonTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(QuizActivity.this,
-                        R.string.correct_answer,
-                        Toast.LENGTH_SHORT);
-
-                toast.show();
+                toastService.showToast(R.string.correct_answer);
             }
         });
 
@@ -34,11 +33,7 @@ public class QuizActivity extends AppCompatActivity {
         buttonFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(QuizActivity.this,
-                        R.string.incorrect_answer,
-                        Toast.LENGTH_SHORT);
-
-                toast.show();
+                toastService.showToast(R.string.incorrect_answer);
             }
         });
     }
