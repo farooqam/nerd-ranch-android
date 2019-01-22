@@ -19,7 +19,6 @@ public class QuizActivity extends AppCompatActivity {
     private List<Question> questions;
     private AnswerService answerService;
     private int currentQuestionIndex = 0;
-    private Button buttonNext;
     private Button buttonFalse;
     private Button buttonTrue;
 
@@ -44,15 +43,6 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        buttonNext = findViewById(R.id.buttonNext);
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentQuestionIndex = (currentQuestionIndex + 1) % questions.size();
-                updateQuestionText();
-            }
-        });
-
         toastService = new ToastService(QuizActivity.this);
         answerService = new AnswerServiceImpl();
 
@@ -67,14 +57,12 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestionText(){
         buttonTrue.setEnabled(true);
         buttonFalse.setEnabled(true);
-        buttonNext.setEnabled(false);
         textViewQuestion.setText(questions.get(currentQuestionIndex).getText());
     }
 
     private void checkAnswer(boolean trueButtonPressed) {
         buttonTrue.setEnabled(false);
         buttonFalse.setEnabled(false);
-        buttonNext.setEnabled(true);
 
         boolean isCorrect;
 
@@ -91,5 +79,8 @@ public class QuizActivity extends AppCompatActivity {
         else {
             toastService.showToast(getString(R.string.incorrect_answer));
         }
+
+        currentQuestionIndex = (currentQuestionIndex + 1) % questions.size();
+        updateQuestionText();
     }
 }
