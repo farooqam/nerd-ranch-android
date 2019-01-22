@@ -1,6 +1,7 @@
 package com.example.geoquiz;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -81,6 +82,22 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         currentQuestionIndex = (currentQuestionIndex + 1) % questions.size();
-        updateQuestionText();
+        int delay = 3000;
+        delay(delay, new DelayCallback() {
+            @Override
+            public void afterDelay() {
+                updateQuestionText();
+            }
+        });
+    }
+
+    private void delay(int milliseconds, final DelayCallback delayCallback) {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                delayCallback.afterDelay();
+            }
+        }, milliseconds);
     }
 }
