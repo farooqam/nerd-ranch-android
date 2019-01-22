@@ -19,11 +19,39 @@ public class QuizActivity extends AppCompatActivity {
     private List<Question> questions;
     private AnswerService answerService;
     private int currentQuestionIndex = 0;
+    private Button buttonNext;
+    private Button buttonFalse;
+    private Button buttonTrue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_main);
+
+        buttonTrue = findViewById(R.id.buttonTrue);
+        buttonTrue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAnswer(true);
+            }
+        });
+
+        buttonFalse = findViewById(R.id.buttonFalse);
+        buttonFalse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkAnswer(false);
+            }
+        });
+
+        buttonNext = findViewById(R.id.buttonNext);
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentQuestionIndex = (currentQuestionIndex + 1) % questions.size();
+                updateQuestionText();
+            }
+        });
 
         toastService = new ToastService(QuizActivity.this);
         answerService = new AnswerServiceImpl();
@@ -34,40 +62,20 @@ public class QuizActivity extends AppCompatActivity {
         textViewQuestion = findViewById(R.id.textViewQuestion);
         updateQuestionText();
 
-        Button buttonTrue = findViewById(R.id.buttonTrue);
-
-        buttonTrue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer(true);
-            }
-        });
-
-        Button buttonFalse = findViewById(R.id.buttonFalse);
-
-        buttonFalse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer(false);
-            }
-        });
-
-        Button buttonNext = findViewById(R.id.buttonNext);
-
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentQuestionIndex = (currentQuestionIndex + 1) % questions.size();
-                updateQuestionText();
-            }
-        });
     }
 
     private void updateQuestionText(){
+        buttonTrue.setEnabled(true);
+        buttonFalse.setEnabled(true);
+        buttonNext.setEnabled(false);
         textViewQuestion.setText(questions.get(currentQuestionIndex).getText());
     }
 
     private void checkAnswer(boolean trueButtonPressed) {
+        buttonTrue.setEnabled(false);
+        buttonFalse.setEnabled(false);
+        buttonNext.setEnabled(true);
+
         boolean isCorrect;
 
         if(trueButtonPressed){
