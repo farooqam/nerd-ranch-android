@@ -15,7 +15,7 @@ import java.util.List;
 public class QuizActivity extends AppCompatActivity {
 
     private TextView textViewQuestion;
-    private Toaster toastService;
+    private ToastService toastService;
     private List<Question> questions;
     private AnswerService answerService;
     private int currentQuestionIndex = 0;
@@ -25,7 +25,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_main);
 
-        toastService = new ToastService(QuizActivity.this);
+        toastService = new ToastServiceImpl(QuizActivity.this);
         answerService = new AnswerServiceImpl();
 
         QuestionRepository questionRepository = new InMemoryQuestionRepository();
