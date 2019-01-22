@@ -1,5 +1,5 @@
 package com.example.geoquiz;
 
-public interface Toaster {
+interface Toaster {
     void showToast(String message);
 }

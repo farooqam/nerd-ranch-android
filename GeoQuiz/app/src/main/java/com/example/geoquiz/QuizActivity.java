@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.geoquiz.domain.AnswerService;
 import com.example.geoquiz.domain.Question;
 import com.example.geoquiz.domain.QuestionRepository;
 
@@ -16,6 +17,7 @@ public class QuizActivity extends AppCompatActivity {
     private TextView textViewQuestion;
     private Toaster toastService;
     private List<Question> questions;
+    private AnswerService answerService;
     private int currentQuestionIndex = 0;
 
     @Override
@@ -24,6 +26,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.quiz_main);
 
         toastService = new ToastService(QuizActivity.this);
+        answerService = new AnswerServiceImpl();
 
         QuestionRepository questionRepository = new InMemoryQuestionRepository();
         questions = questionRepository.GetQuestions();
@@ -36,7 +39,7 @@ public class QuizActivity extends AppCompatActivity {
         buttonTrue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toastService.showToast(getString(R.string.correct_answer));
+                checkAnswer(true);
             }
         });
 
@@ -45,7 +48,7 @@ public class QuizActivity extends AppCompatActivity {
         buttonFalse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toastService.showToast(getString(R.string.incorrect_answer));
+                checkAnswer(false);
             }
         });
 
@@ -62,5 +65,23 @@ public class QuizActivity extends AppCompatActivity {
 
     private void updateQuestionText(){
         textViewQuestion.setText(questions.get(currentQuestionIndex).getText());
+    }
+
+    private void checkAnswer(boolean trueButtonPressed) {
+        boolean isCorrect;
+
+        if(trueButtonPressed){
+            isCorrect = answerService.AnswerIsCorrect(questions.get(currentQuestionIndex), true);
+        }
+        else {
+            isCorrect = answerService.AnswerIsCorrect(questions.get(currentQuestionIndex), false);
+        }
+
+        if(isCorrect){
+            toastService.showToast(getString(R.string.correct_answer));
+        }
+        else {
+            toastService.showToast(getString(R.string.incorrect_answer));
+        }
     }
 }

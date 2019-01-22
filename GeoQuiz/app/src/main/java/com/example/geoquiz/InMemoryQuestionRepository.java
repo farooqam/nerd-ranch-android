@@ -9,7 +9,7 @@ import java.util.List;
 public class InMemoryQuestionRepository implements QuestionRepository {
     @Override
     public List<Question> GetQuestions() {
-        List<Question> questions = new ArrayList<Question>();
+        List<Question> questions = new ArrayList<>();
 
         questions.add(new Question(
                 "Alaska is the least populated state in the United States.",
