@@ -5,7 +5,7 @@ import com.example.geoquiz.domain.Question;
 
 public class AnswerServiceImpl implements AnswerService {
     @Override
-    public boolean AnswerIsCorrect(Question question, boolean userAnswer) {
+    public boolean answerIsCorrect(Question question, boolean userAnswer) {
         return question.getAnswerIsTrue() == userAnswer;
     }
 }

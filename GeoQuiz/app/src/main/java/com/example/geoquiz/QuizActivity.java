@@ -48,7 +48,7 @@ public class QuizActivity extends AppCompatActivity {
         answerService = new AnswerServiceImpl();
 
         QuestionRepository questionRepository = new InMemoryQuestionRepository();
-        questions = questionRepository.GetQuestions();
+        questions = questionRepository.getQuestions();
 
         textViewQuestion = findViewById(R.id.textViewQuestion);
         updateQuestionText();
@@ -68,10 +68,10 @@ public class QuizActivity extends AppCompatActivity {
         boolean isCorrect;
 
         if(trueButtonPressed){
-            isCorrect = answerService.AnswerIsCorrect(questions.get(currentQuestionIndex), true);
+            isCorrect = answerService.answerIsCorrect(questions.get(currentQuestionIndex), true);
         }
         else {
-            isCorrect = answerService.AnswerIsCorrect(questions.get(currentQuestionIndex), false);
+            isCorrect = answerService.answerIsCorrect(questions.get(currentQuestionIndex), false);
         }
 
         if(isCorrect){
