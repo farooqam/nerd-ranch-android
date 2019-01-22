@@ -12,7 +12,7 @@ public class ToastService implements Toaster {
         this.activity = activity;
     }
     @Override
-    public void showToast(int message) {
+    public void showToast(String message) {
         Toast toast = Toast.makeText(this.activity,
                 message,
                 Toast.LENGTH_SHORT);

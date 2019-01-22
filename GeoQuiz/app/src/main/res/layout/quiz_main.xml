@@ -9,8 +9,7 @@
         android:id="@+id/textViewQuestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:text="@string/question_text"/>
+        android:padding="24dp"/>
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
@@ -31,4 +30,11 @@
             android:layout_marginStart="10dp"
             android:text="@string/false_button"/>
     </android.support.v7.widget.LinearLayoutCompat>
+
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/next_button"/>
 </LinearLayout>
