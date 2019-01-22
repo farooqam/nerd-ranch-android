@@ -25,7 +25,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_main);
 
-        toastService = new ToastServiceImpl(QuizActivity.this);
+        toastService = new ToastService(QuizActivity.this);
         answerService = new AnswerServiceImpl();
 
         QuestionRepository questionRepository = new InMemoryQuestionRepository();
