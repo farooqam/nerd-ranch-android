@@ -11,6 +11,7 @@ import com.example.geoquiz.domain.AnswerService;
 import com.example.geoquiz.domain.Question;
 import com.example.geoquiz.domain.QuestionRepository;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class QuizActivity extends AppCompatActivity {
@@ -19,13 +20,25 @@ public class QuizActivity extends AppCompatActivity {
     private ToastService toastService;
     private List<Question> questions;
     private AnswerService answerService;
-    private int currentQuestionIndex = 0;
     private Button buttonFalse;
     private Button buttonTrue;
+    private QuizActivityState quizActivityState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null) {
+            Serializable state = savedInstanceState.getSerializable(QuizActivityState.Key);
+
+            if(state != null) {
+                quizActivityState = (QuizActivityState)state;
+            }
+        }
+        else {
+            quizActivityState = new QuizActivityState();
+        }
+
         setContentView(R.layout.quiz_main);
 
         buttonTrue = findViewById(R.id.buttonTrue);
@@ -52,13 +65,18 @@ public class QuizActivity extends AppCompatActivity {
 
         textViewQuestion = findViewById(R.id.textViewQuestion);
         updateQuestionText();
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putSerializable(QuizActivityState.Key, quizActivityState);
     }
 
     private void updateQuestionText(){
         buttonTrue.setEnabled(true);
         buttonFalse.setEnabled(true);
-        textViewQuestion.setText(questions.get(currentQuestionIndex).getText());
+        textViewQuestion.setText(questions.get(quizActivityState.getCurrentQuestionIndex()).getText());
     }
 
     private void checkAnswer(boolean trueButtonPressed) {
@@ -68,10 +86,10 @@ public class QuizActivity extends AppCompatActivity {
         boolean isCorrect;
 
         if(trueButtonPressed){
-            isCorrect = answerService.answerIsCorrect(questions.get(currentQuestionIndex), true);
+            isCorrect = answerService.answerIsCorrect(questions.get(quizActivityState.getCurrentQuestionIndex()), true);
         }
         else {
-            isCorrect = answerService.answerIsCorrect(questions.get(currentQuestionIndex), false);
+            isCorrect = answerService.answerIsCorrect(questions.get(quizActivityState.getCurrentQuestionIndex()), false);
         }
 
         if(isCorrect){
@@ -81,7 +99,7 @@ public class QuizActivity extends AppCompatActivity {
             toastService.showToast(getString(R.string.incorrect_answer));
         }
 
-        currentQuestionIndex = (currentQuestionIndex + 1) % questions.size();
+        quizActivityState.setCurrentQuestionIndex((quizActivityState.getCurrentQuestionIndex() + 1) % questions.size());
         int delay = 3000;
         delay(delay, new DelayCallback() {
             @Override
