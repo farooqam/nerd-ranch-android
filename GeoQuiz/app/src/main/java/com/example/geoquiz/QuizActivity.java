@@ -1,7 +1,6 @@
 package com.example.geoquiz;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +10,6 @@ import com.example.geoquiz.domain.AnswerService;
 import com.example.geoquiz.domain.Question;
 import com.example.geoquiz.domain.QuestionRepository;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class QuizActivity extends AppCompatActivity {
@@ -23,21 +21,14 @@ public class QuizActivity extends AppCompatActivity {
     private Button buttonFalse;
     private Button buttonTrue;
     private QuizActivityState quizActivityState;
+    private StateManager stateManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
 
-        if(savedInstanceState != null) {
-            Serializable state = savedInstanceState.getSerializable(QuizActivityState.Key);
-
-            if(state != null) {
-                quizActivityState = (QuizActivityState)state;
-            }
-        }
-        else {
-            quizActivityState = new QuizActivityState();
-        }
+        stateManager = new StateManager();
+        quizActivityState = stateManager.restoreState(bundle);
 
         setContentView(R.layout.quiz_main);
 
@@ -68,9 +59,9 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        state.putSerializable(QuizActivityState.Key, quizActivityState);
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        stateManager.saveState(bundle, quizActivityState);
     }
 
     private void updateQuestionText(){
@@ -100,22 +91,12 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         quizActivityState.setCurrentQuestionIndex((quizActivityState.getCurrentQuestionIndex() + 1) % questions.size());
-        int delay = 3000;
-        delay(delay, new DelayCallback() {
+
+        TimedOperation.doAfter(2000, new DelayCallback() {
             @Override
             public void afterDelay() {
                 updateQuestionText();
             }
         });
-    }
-
-    private void delay(int milliseconds, final DelayCallback delayCallback) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                delayCallback.afterDelay();
-            }
-        }, milliseconds);
     }
 }
